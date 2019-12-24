@@ -6,11 +6,11 @@ Later maybe I will make the server on the node.js
 I plan to use:
 + React
 + TypeScript
++ tsLint
++ Prettier
+
 
 - MobX
 - Less
-- Linter
-- tsLint
 - stylelint
-- Prettier
 
