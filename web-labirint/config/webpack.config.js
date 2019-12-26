@@ -17,6 +17,7 @@ const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
+const getCSSModuleLocalIdentPatch = require('./getCSSModuleLocalIdentPatch');
 const paths = require('./paths');
 const modules = require('./modules');
 const getClientEnvironment = require('./env');
@@ -46,6 +47,7 @@ const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
+const lessModuleRegex = /\.less$/;
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
@@ -455,13 +457,13 @@ module.exports = function (webpackEnv) {
                         },
                         // --------- START Adisey Less
                         {
-                            test: /\.less$/,
+                            test: lessModuleRegex,
                             use: getStyleLoaders(
                                 {
                                     importLoaders: 2,
                                     sourceMap: isEnvProduction && shouldUseSourceMap,
                                     modules: {
-                                        getLocalIdent: getCSSModuleLocalIdent,
+                                        getLocalIdent: getCSSModuleLocalIdentPatch,
                                     },
                                 },
                                 'less-loader'
