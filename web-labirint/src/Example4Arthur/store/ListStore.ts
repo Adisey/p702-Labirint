@@ -22,6 +22,9 @@ export default class ListStore {
     return ListStore.instance;
   }
 
+  @observable pageNumber: number = 0;
+  private perPage: number = 10;
+
   @observable loading: boolean = false;
   @action setLoading(l: boolean) {
     console.log("--()- this -", this);
@@ -33,17 +36,32 @@ export default class ListStore {
     this.list = list;
   }
 
-  @observable allItems: number = 0;
-  @action setAllItems(allItems: number) {
-    this.allItems = allItems;
+  @observable count: number = 0;
+  @action setCount(count: number) {
+    this.count = count;
   }
 
   @action async loadList() {
     this.loading = true;
-    const { list, allItems } = await middlewareGenerateList(2, 10);
-    this.setAllItems(allItems);
+    const { list, allItems } = await middlewareGenerateList(
+      this.pageNumber,
+      this.perPage
+    );
+    this.setCount(allItems);
     this.setList(list);
     this.loading = false;
+  }
+
+  @action async nextPage() {
+    this.pageNumber++;
+    await this.loadList();
+  }
+
+  @action async prevPage() {
+    if (this.pageNumber > 0) {
+      this.pageNumber--;
+    }
+    await this.loadList();
   }
 }
 
@@ -53,11 +71,11 @@ function middlewareGenerateList(page: number, count: number): Promise<IResult> {
   const allItems: number = 35;
   let i: number;
   for (i = 0; i < count; i++) {
-    list.push(generateItem(page * 10000 + i));
+    list.push(generateItem(page * 100 + i));
   }
   const result = {
-    allItems: allItems,
-    list: list
+    list: list,
+    allItems: allItems
   };
 
   return new Promise(resolve => {

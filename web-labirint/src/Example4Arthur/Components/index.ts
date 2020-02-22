@@ -1,5 +1,3 @@
-import ListItems from './ListItems'
+import Block from "./Block";
 
-export {
-    ListItems
-}
+export { Block };
